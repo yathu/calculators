@@ -1,0 +1,184 @@
+@charset "utf-8";
+/* CSS Document */
+
+.label {
+    text-align: left;
+    font-size: 18px;
+    color: #03C;
+}
+
+.label p {
+    padding-top: 5px;
+    padding-left: 15px;
+}
+
+#ip_holder,
+#subnet_holder,
+#button,
+#net_label_holder_c,
+#net_label_holder_b,
+net_label_holder_a {
+    width: 80%;
+}
+
+.ip_sub {
+    text-align: center;
+    color: #390;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.result {
+    color: #090;
+    padding-left: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+td {
+    padding-bottom: 15px;
+}
+
+.result::before {
+    content: ":  "
+}
+
+#net_label_holder_c,
+#net_label_holder_b,
+#net_label_holder_a {
+    position: relative;
+    padding-left: 12.5%;
+}
+
+#net_label_holder_c,
+#net_label_holder_b,
+#net_label_holder_a {
+    display: none;
+}
+
+#my {
+    position: fixed;
+    z-index: 25;
+    top: 55%;
+    right: 5px;
+    display: none;
+    bottom: -5px;
+}
+
+#about {
+    position: fixed;
+    z-index: 30;
+    top: 5%;
+    right: 5px;
+    bottom: 0px;
+}
+
+h3 {
+    color: #337ab7;
+    position: absolute;
+    left: 25%;
+    right: 25%;
+    font-weight: bold;
+}
+/**demo holder***/
+
+#ip_c_bin {
+    color: #390;
+    font-size: 17px;
+    font-weight: bold;
+    width: 175px;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+#sub_c_bin {
+    color: #F00;
+    font-size: 17px;
+    font-weight: bold;
+    width: 175px;
+    text-align: center;
+}
+
+#ans_c_bin {
+    color: blue;
+    font-size: 17px;
+    font-weight: bold;
+    width: 175px;
+    text-align: center;
+    margin-left: 27px;
+}
+
+#netaddr_how_wrap {
+position: absolute;
+    width: 300px;
+      right: 12%;
+ display: none;
+padding-top: -5px;
+}
+
+#indicate_subnet_address {
+    padding-left: 150px;
+    padding-right: 150px;
+}
+
+#how_net,#how_bcast,#how_nohost,#how_nosubnet,#how_cidr,#how_hrange {
+    display: none;
+    margin-left: 20px;
+    height: 35px;
+}
+#demonstration_txt{
+    padding:5px;
+    background-color: lightblue;
+    border: 1px solid #000;
+    border-radius: 5px;
+    position: absolute;
+    margin-top: 15px;
+    padding: 15px;
+    width:350px;
+    font-weight: bold;
+}
+#demonstration_txt span{
+cursor:pointer;
+}
+.demonstrate_popup{
+    background-color: lightblue;
+    border: 2px solid #000;
+    border-radius: 5px;
+    width:35%;
+    height:325px;
+    position: fixed;
+left:30%;
+    padding: 50px;
+    color: green;
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+  display: none;
+
+    z-index:500;
+}
+.hilight_1{
+    background-color:#00FF00;
+}.hilight_2{
+    background-color:#FF7E91;
+}
+#exit{width:30px;
+    height:30px;
+    position:absolute;
+    top:0px;
+    right:0px;
+    font-weight: bold;
+    cursor: pointer;
+    color:red;
+
+
+}
+#summary{
+padding-bottom: 10px;
+}
+#valid_sub{
+width:520px;
+
+overflow:scroll;
+
+}

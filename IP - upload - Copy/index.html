@@ -1,0 +1,879 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>IP</title>
+    <link rel="icon" type="image/png" href="ip.png" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/animate.css" />
+    <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.autotab.min.js"></script>
+    <script src="js/vivus.js"></script>
+    <script>
+        $(function () {
+
+            ipclass = [1];// global variable array
+            demonstration = [1];// global variable array
+
+
+            $.autotab({
+                tabOnSelect: true
+            });
+            $('.ip_sub').autotab('filter', 'number');
+
+            /* validate */
+            $('#ip_4').focusout(function () {
+                $ip_1 = parseInt($("#ip_1").val());
+                $ip_2 = parseInt($("#ip_2").val());
+                $ip_3 = parseInt($("#ip_3").val());
+                $ip_4 = parseInt($("#ip_4").val());
+
+                if ($ip_1 == 0 && $ip_2 == 0 && $ip_3 == 0 && $ip_4 == 0) {
+                    //alert("This is The device boot address right !");
+
+
+                    $("#ip_1").val("");
+                    $("#ip_2").val("");
+                    $("#ip_3").val("");
+                    $("#ip_4").val("");
+                    $("#ip_1").focus();
+                                  $("#demonstrate_popup").html("<span style='color:red;'>This is The device boot address right !</span>");
+                     $("#demonstrate_popup").show();
+                error_alert("#demonstrate_popup");
+                setTimeout(function () {
+
+                    $("#demonstrate_popup").fadeOut(500);
+                }, 3500);
+
+                } else if ($ip_1 == 111 && $ip_2 == 111 && $ip_3 == 111 && $ip_4 == 111) {
+                   // alert("This is the Distance broadcast  address right !");
+$("#demonstrate_popup").html("<span style='color:red;'>This is the Distance broadcast  address right ! </span>");
+                     $("#demonstrate_popup").show();
+                error_alert("#demonstrate_popup");
+                setTimeout(function () {
+
+                    $("#demonstrate_popup").fadeOut(500);
+                }, 3500);
+                    $("#ip_4").val(112)
+                } else if ($ip_1 == 255 && $ip_2 == 255 && $ip_3 == 255 && $ip_4 == 255) {
+                    //alert("This is the local broadcast  address right !");
+$("#demonstrate_popup").html("<span style='color:red;'>This is the local broadcast  address right !</span>");
+                     $("#demonstrate_popup").show();
+                error_alert("#demonstrate_popup");
+                setTimeout(function () {
+
+                    $("#demonstrate_popup").fadeOut(500);
+                }, 3500);
+                }
+
+            });
+
+
+
+            $('.ip_sub').focusout(function () {
+                $focus_out_id = $(this).attr("id");
+                $focus_out_val = $(this).val();
+                if ($focus_out_val > 255) { //|| $focus_out_val.length==0
+
+                    $(this).val(255);
+                }
+
+                // display ip address
+
+            });
+            /*   $('.ip_sub').keypress(function () {
+
+                   $focus_out_id = $(this).attr("id");
+                   $focus_out_val = $(this).val();
+                   if ($focus_out_val > 255) {
+                       $(this).val(255);
+
+                   }
+                   if ($focus_out_val == 127) {
+                       $(this).val(126);
+                       alert("127 for loopback process right !");
+                   }
+               });*/
+            $("#ip_1").change(function () {
+  $("#how_net").hide();
+                    $("#how_bcast").hide();
+                    $("#how_nohost").hide();
+                    $("#how_nosubnet").hide();
+                    $("#how_cidr").hide();
+                    $("#how_hrange").hide();
+$("#netaddr_how_wrap").hide();
+$("#demonstrate_popup").hide();
+                Anim($(this).attr('id'));
+            })
+            $('.ip').change(function () {
+                    $("#net_label_holder_c").hide(); // class C
+                    $("#net_label_holder_b").hide(); // class B
+                    $("#net_label_holder_a").hide(); // class A
+
+                    Anim($(this).attr('id'));
+                    $("#sub_1").val("").prop('disabled', false);
+                    $("#sub_2").val("").prop('disabled', false);
+                    $("#sub_3").val("").prop('disabled', false);
+                    $("#sub_4").val("").prop('disabled', false);
+
+
+
+                    $ip_val = $("#ip_1").val();
+                    if ($ip_val.length >= 1) {
+                        $return = ip_check($ip_val);
+                        $("#ip_class").html($return);
+
+                        $("#net_address").html("");
+                        $("#broadcast_address").html("");
+                        $("#no_hosts").html("");
+                        $("#no_subnets").html("");
+                        $("#cidr").html("");
+                        $("#host_res").html("");
+                        $("#valid_sub").html("");
+
+                        Animresults("#ip_class");
+                        if ($return == "A") {
+                            //Animsub("#sub_1");
+                            $("#sub_1").val(255).prop('disabled', true);
+                            $("#sub_2").val(0);
+                            $("#sub_3").val(0);
+                            $("#sub_4").val(0);
+
+                        } else if ($return == "B") {
+                            //Animsub("#sub_1");
+                            //Animsub("#sub_2");
+                            $("#sub_1").val(255).prop('disabled', true);
+                            $("#sub_2").val(255).prop('disabled', true);
+                            $("#sub_3").val(0);
+                            $("#sub_4").val(0);
+                        } else if ($return == "C") {
+                            //Animsub("#sub_1");Animsub("#sub_2");Animsub("#sub_3");
+                            $("#sub_1").val(255).prop('disabled', true);
+                            $("#sub_2").val(255).prop('disabled', true);
+                            $("#sub_3").val(255).prop('disabled', true);
+                            $("#sub_4").val(0);
+                        } else if ($return == "D") {
+                            //Animsub("#sub_1");Animsub("#sub_2");Animsub("#sub_3");Animsub("#sub_4");
+                            $("#sub_1").val(255).prop('disabled', true);
+                            $("#sub_2").val(255).prop('disabled', true);
+                            $("#sub_3").val(255).prop('disabled', true);
+                            $("#sub_4").val(255).prop('disabled', true);
+                        } else if ($return == "E") {
+                            //Animsub("#sub_1");Animsub("#sub_2");Animsub("#sub_3");Animsub("#sub_4");
+                            $("#sub_1").val(255).prop('disabled', true);
+                            $("#sub_2").val(255).prop('disabled', true);
+                            $("#sub_3").val(255).prop('disabled', true);
+                            $("#sub_4").val(255).prop('disabled', true);
+                        }
+                    } else
+                        $("#ip_class").html("");
+
+
+                })
+                /* ip check  */
+
+            function ip_check(ip) {
+
+                if (ip > 0 && ip < 127)
+                    var ip_class = "A";
+                else if (ip > 127 && ip <= 191)
+                    var ip_class = "B";
+                else if (ip > 191 && ip <= 223)
+                    var ip_class = "C";
+                else if (ip > 223 && ip <= 239)
+                    var ip_class = "D";
+                else if (ip > 239 && ip <= 255)
+                    var ip_class = "E";
+                ipclass[0] = ip_class;
+                return ip_class;
+            }
+
+        });
+    </script>
+
+</head>
+
+<body>
+<center><h3>IP V4 Address calculator as Per Bit SIV Networking</h3></center>
+    <br />
+    <br />
+    <br />
+    <br />
+
+
+    <div class="row">
+
+        <div id="net_label_holder_c" class="col-sm-10 col-xs-8">
+
+            <svg id="net_c" onclick="net_c.reset().play();" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="90.9%" height="43.333px" viewBox="0 0 900.667 43.333" enable-background="new 0 0 900.667 43.333" xml:space="preserve">
+                <text transform="matrix(1.0078 0 0 1 252.333 19.166)" stroke="#2A3593" stroke-miterlimit="10" font-family="'MyriadPro-Regular'" font-size="18">Network Id</text>
+                <path fill="none" stroke="#2A3593" stroke-width="3" stroke-miterlimit="10" d="M3.991,43.333c0,0-1.596-14,16.491-14h267.064
+    l9.738-4L305.854,29h265.461c17.976,0,16.393,14,16.393,14" />
+                <path fill="none" stroke="#6CBE45" stroke-width="3" stroke-miterlimit="10" d="M608.965,43.333c0,0-0.441-14,4.572-14h74.036
+    l2.701-4L692.65,29h73.593c4.983,0,4.546,14,4.546,14" />
+                <text transform="matrix(1.0078 0 0 1 662.3325 19.166)" stroke="#6DBE45" stroke-miterlimit="10" font-family="'MyriadPro-Regular'" font-size="18">Host Id</text>
+            </svg>
+
+
+
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div id="net_label_holder_b" class="col-sm-10 col-xs-8">
+
+            <svg id="net_b" onclick="net_b.reset().play();" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="900.667px" height="43.333px" viewBox="0 0 900.667 43.333" enable-background="new 0 0 900.667 43.333" xml:space="preserve">
+                <text transform="matrix(1.0078 0 0 1 145.333 21.6665)" font-family="'MyriadPro-Regular'" font-size="18">Network Id</text>
+                <text transform="matrix(1.0078 0 0 1 145.333 20.6665)" fill="none" stroke="#2A3593" stroke-miterlimit="10" font-family="'MyriadPro-Regular'" font-size="18">Network Id</text>
+                <path fill="none" stroke="#2A3593" stroke-width="3" stroke-miterlimit="10" d="M12.122,43.333c0,0-0.974-14,10.065-14h163l5.944-4
+    l5.23,3.668h162.023c10.971,0,10.005,14,10.005,14" />
+                <path fill="none" stroke="#6CBE45" stroke-width="3" stroke-miterlimit="10" d="M383.685,43.333c0,0-0.945-14,9.827-14h159.139
+    l5.806-4L563.56,29h158.186c10.711,0,9.77,14,9.77,14" />
+                <text transform="matrix(1.0078 0 0 1 525.3315 21.6665)" font-family="'MyriadPro-Regular'" font-size="18">Host Id</text>
+                <text transform="matrix(1.0078 0 0 1 525.3315 21.6665)" fill="none" stroke="#6DBE45" stroke-miterlimit="10" font-family="'MyriadPro-Regular'" font-size="18">Host Id</text>
+            </svg>
+
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div id="net_label_holder_a" class="col-sm-10 col-xs-8">
+
+            <svg id="net_a" onclick="net_a.reset().play();" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="900.667px" height="43.333px" viewBox="0 0 900.667 43.333" enable-background="new 0 0 900.667 43.333" xml:space="preserve">
+                <text transform="matrix(1.0078 0 0 1 74.333 21.1665)" font-family="'MyriadPro-Regular'" font-size="18">Network Id</text>
+                <text transform="matrix(1.0078 0 0 1 74.333 20.1665)" fill="none" stroke="#2A3593" stroke-miterlimit="10" font-family="'MyriadPro-Regular'" font-size="18">Network Id</text>
+                <path fill="none" stroke="#2A3593" stroke-width="3" stroke-miterlimit="10" d="M12.111,43.333c0,0-0.471-14,4.864-14h78.768
+    l2.873-4L101.143,29h78.296c5.302,0,4.835,14,4.835,14" />
+                <path fill="none" stroke="#6CBE45" stroke-width="3" stroke-miterlimit="10" d="M196.628,44.333c0,0-1.475-14,15.345-14h248.489
+    l9.063-4L477.493,30h246.999c16.725,0,15.253,14,15.253,14" />
+                <text transform="matrix(1.0078 0 0 1 444.334 21.6665)" font-family="'MyriadPro-Regular'" font-size="18">Host Id</text>
+                <text transform="matrix(1.0078 0 0 1 444.334 21.6665)" fill="none" stroke="#6DBE45" stroke-miterlimit="10" font-family="'MyriadPro-Regular'" font-size="18">Host Id</text>
+            </svg>
+
+
+
+        </div>
+    </div>
+<div id="netaddr_how_wrap">
+
+    <div class="row" id="net_demo_c">
+        <div  class="col-sm-6 col-xs-6">
+<svg id="demo_net_c" onclick="demo_net_c.reset().play();" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     width="150.811px" height="95.433px" viewBox="0 0 182.811 132.433" enable-background="new 0 0 182.811 132.433"
+     xml:space="preserve">
+<line fill="none" stroke="#6ABD45" stroke-width="6" stroke-miterlimit="10" x1="12.054" y1="28.378" x2="176.919" y2="28.378"/>
+<line fill="none" stroke="#6ABD45" stroke-width="6" stroke-miterlimit="10" x1="154.297" y1="9.459" x2="175.919" y2="28.378"/>
+<line fill="none" stroke="#6ABD45" stroke-width="6" stroke-miterlimit="10" x1="154.697" y1="48.634" x2="175.519" y2="28.838"/>
+<line fill="none" stroke="#F04A53" stroke-width="6" stroke-miterlimit="10" x1="12.054" y1="95.946" x2="176.919" y2="95.946"/>
+<line fill="none" stroke="#F04A53" stroke-width="6" stroke-miterlimit="10" x1="154.297" y1="77.027" x2="175.919" y2="95.946"/>
+<line fill="none" stroke="#F04A53" stroke-width="6" stroke-miterlimit="10" x1="154.697" y1="116.202" x2="175.519" y2="96.406"/>
+</svg>
+
+        </div>
+        <div class="col-sm-6 col-xs-6" >
+ <div>
+                <input type="text" class="form-control "  id="ip_c_bin" name="ip_c_bin" disabled>
+                <input type="text" class="form-control "  id="sub_c_bin" name="sub_c_bin" disabled>
+            </div>
+    </div>
+    </div>
+
+<div class="row" id="indicate_subnet_address">
+     <div  class="col-sm-6 col-xs-6">
+    <svg id="demo_indicate_c" onclick="demo_indicate_c.reset().play();" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     width="210px" height="55.081px" viewBox="0 0 372 55.081" enable-background="new 0 0 372 55.081" xml:space="preserve">
+<path fill="none" stroke="#4476BB" stroke-width="3" stroke-miterlimit="10" d="M16.237,21.503c0,0-0.938,21.416,9.697,21.416
+    H182.97l5.726,6.119l5.039-5.611h156.094c10.568,0,9.639-21.415,9.639-21.415"/>
+<text transform="matrix(1 0 0 1 48.0483 35.2705)"><tspan x="0" y="0" fill="#5DBA47" font-family="'MyriadPro-Regular'" font-size="30">Peform </tspan><tspan x="97.409" y="0" fill="#EE233F" font-family="'MyriadPro-Regular'" font-size="30" id="indicate_var">And</tspan><tspan x="149.338" y="0" fill="#5DBA47" font-family="'MyriadPro-Regular'" font-size="30"> Operation</tspan></text>
+</svg>
+         </div>
+
+ <input type="text" class="form-control "  id="ans_c_bin" name="ans_c_bin" disabled>
+    </div>
+ <div align="justify" id="demonstration_txt">
+      <b id="net_how_paragraph">
+          <b id="summary" style="color:green;"></b>
+          This is the Class <span style="color:red;">C</span> IP V4 Address .<br>
+Therefore peform <span style="color:red;" id="operation_demonstration"> and</span> operation to<br>
+        <span style="color:red;">Last part of IP Address(to binary)</span><br>
+    <span style="color:red;" id="broad_demonstration"> Last part of Subnet Address(to binary)</span> <br>
+    Then <span style="color:red;">convert to decimal</span> <br>
+    Add(Append) with the <span style="color:red;">Network Id.</span><br>
+    Now you got your <span style="color:red;"> Subnet / Nework address.</span></b>
+</div>
+</div>
+
+
+   <center><div class="demonstrate_popup" id="demonstrate_popup">
+       <div id="exit">X</div>
+
+       </div></center>
+
+    <div class="row " id="ip_holder">
+
+        <div class="col-sm-2 col-xs-3 label">
+            <p>IP Address :</p>
+        </div>
+        <form name="form_ipaddress" id="form_ipaddress">
+            <div class="col-sm-2 col-xs-2">
+                <input type="text" class="form-control ip_sub ip" maxlength="3" id="ip_1" name="ip_1">
+            </div>
+            <div class="col-sm-2 col-xs-2">
+                <input type="text" class="form-control ip_sub ip" maxlength="3" id="ip_2" name="ip_2">
+            </div>
+            <div class="col-sm-2 col-xs-2">
+                <input type="text" class="form-control ip_sub ip" maxlength="3" id="ip_3" name="ip_3">
+            </div>
+            <div class="col-sm-2 col-xs-2">
+                <input type="text" class="form-control ip_sub ip" maxlength="3" id="ip_4" name="ip_4">
+            </div>
+        </form>
+    </div>
+
+
+
+    <form name="form_subnet" id="form_subnet">
+        <div class="row " id="subnet_holder">
+            <div class="col-sm-2 col-xs-3 label">
+                <p>Subnet Mask :</p>
+            </div>
+            <div class="col-sm-2 col-xs-2">
+                <input type="text" class="form-control ip_sub sub" maxlength="3" id="sub_1" name="sub_1">
+            </div>
+            <div class="col-sm-2 col-xs-2">
+                <input type="text" class="form-control ip_sub sub" maxlength="3" id="sub_2" name="sub_2">
+            </div>
+            <div class="col-sm-2 col-xs-2">
+                <input type="text" class="form-control ip_sub sub" maxlength="3" id="sub_3" name="sub_3">
+            </div>
+            <div class="col-sm-2 col-xs-2">
+                <input type="text" class="form-control ip_sub sub" maxlength="3" id="sub_4" name="sub_4">
+            </div>
+        </div>
+        <br>
+    </form>
+
+
+    <div align="center" id="button">
+        <button type="button" class="btn btn-primary" onclick="calculate()">Calculate</button>
+    </div>
+    <br>
+    <br />
+    <table width="845" border="0">
+        <tr>
+            <td width="22%" class="label"> Class of IP </div>
+            </td>
+            <td width="520px"> <span id="ip_class" class="result"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="label">Network / Subnet address</td>
+            <td> <span id="net_address" class="result"></span></td> <td><button class="btn btn-success" id="how_net" >How?</button>
+            </td>
+        </tr>
+        <tr>
+            <td class="label">Broadcast address</td>
+            <td><span id="broadcast_address" class="result"></span> </td><td><button class="btn btn-success" id="how_bcast" >How?</button>
+            </td>
+        </tr>
+        <tr>
+            <td class="label"> No of hosts </td>
+            <td><span id="no_hosts" class="result"></span></td><td><button class="btn btn-success" id="how_nohost" >How?</button>
+            </td>
+        </tr>
+        <tr>
+            <td class="label">No of subnets </td>
+            <td><span id="no_subnets" class="result"></span></td><td><button class="btn btn-success" id="how_nosubnet" >How?</button>
+            </td>
+        </tr>
+        <tr>
+            <td class="label">CIDR </td>
+            <td><span id="cidr" class="result"></span></td><td><button class="btn btn-success" id="how_cidr" >How?</button>
+            </td>
+        </tr>
+        <tr>
+            <td class="label">Host Range</td>
+            <td><span id="host_res" class="result"></span></td><td><button class="btn btn-success" id="how_hrange" >How?</button></td>
+        </tr>
+        <tr>
+            <td class="label">Valid Subnets</td>
+            <td><div id="valid_sub" class="result"></div></td><td></td>
+        </tr>
+    </table>
+
+<div id="my" ><img src="NEW.png" ></div>
+<div id="about"><button type="button" class="btn btn-primary" id="greet" > About</button></div>
+
+<script type="text/javascript" src="js/demonstration.js"></script>
+<script type="text/javascript" src="js/how.js"></script>
+
+<script>
+    $("#greet").mouseover(function(){
+$(this).html("Thank you & Click here");
+});
+        $("#greet").mouseout(function(){
+$(this).html("About");
+});
+
+$("#about").click(function(){
+$("#my").fadeIn();
+Anim_my("#my");
+$("#my").delay(2000).fadeOut(1500);
+})
+ $(document).bind("contextmenu",function(e){
+       $("#my").fadeIn();
+Anim_my("#my");
+$("#my").delay(2000).fadeOut(1500);
+        return false;
+    });
+    $("#textinput").keydown(function(e) {
+    e.keyCode; // this value
+});
+    $(document).keydown(function(e){
+        $key= e.keyCode;
+     if($key==123) { $("#my").fadeIn();
+Anim_my("#my");
+$("#my").delay(2000).fadeOut(1500);
+        return false;
+                   }
+    });
+
+</script>
+
+    <script>
+
+
+
+      /*  function count_hosts() {
+
+
+        }*/
+
+        function inverse_bin(subnet_address) {
+            $sub_array = subnet_address.split("");
+            $count_hosts = 0;
+            for ($i = 0; $i < $sub_array.length; $i++) {
+                $count_hosts = ($sub_array[$i] == 0) ? ($count_hosts += 1) : $count_hosts;
+                //inverse of actual subnet
+                $sub_array[$i] = $sub_array[$i] == 1 ? 0 : 1;
+
+
+            } //alert($count_hosts);
+            return [$sub_array.join(''), $count_hosts];
+        }
+
+
+        function error_check($ip, $sub) {
+            if ($.trim($ip) != "") {
+                return "ok";
+            } else {
+                return "err";
+            }
+
+        }
+
+        function calculate() {
+            error_count = 0;
+            $("#net_address").html("");
+            $("#broadcast_address").html("");
+                    $("#no_hosts").html("");
+                    $("#no_subnets").html("");
+                    $("#cidr").html("");
+                    $("#host_res").html("");
+            $("#valid_sub").html("");
+
+
+            $ip_data = $("form#form_ipaddress").serialize();
+
+            $ip_fiedls = $ip_data.split('&'); //all fields
+
+            for ($i = 0; $i < $ip_fiedls.length; $i++) {
+
+
+
+                $ip_field = $ip_fiedls[$i].split('=')[0];
+                $ip_value = $ip_fiedls[$i].split('=')[1];
+                $check = error_check($ip_value, "");
+               // alert($check);
+                if ($check == "err") {
+                    //$("#"+$ip_field).css({"background-color":"#F00"});
+                   ++error_count;
+                }
+                //alert($check)
+
+            }
+            if (error_count == 0) {
+
+                if (ipclass[0] == "C") {
+                    $("#net_label_holder_c").show();
+                    net_c.reset().play();
+                    $("#how_net").show();
+                    $("#how_bcast").show();
+                    $("#how_nohost").show();
+                    $("#how_nosubnet").show();
+                    $("#how_cidr").show();
+                    $("#how_hrange").show();
+
+$subnet_netaddr=($("#ip_4").val() & $("#sub_4").val());// for class c for host range
+
+                    $net_address = ($("#ip_1").val()) + "." + ($("#ip_2").val()) + "." + ($("#ip_3").val()) + "." + ($subnet_netaddr); //ip  part4 & sub part 4
+                    $("#net_address").html($net_address);
+                    /* broadcast address */
+                    if (parseInt($("#sub_4").val()) == 0) {
+                        $subnet_address_1 = "00000000"; // if zero
+                    } else {
+                        $subnet_address_1 = parseInt($("#sub_4").val()).toString(2); //convert to binary
+                        /*if subnet address length <=8 */
+                        if ($subnet_address_1.length != 8) {
+                            //alert($subnet_address_1);
+                            $curr_length = $subnet_address_1.length;
+                            $needed = 8 - $curr_length;
+                            $sub_final = "";
+                            for ($x = 0; $x < $needed; $x++)
+                                $sub_final += 0;
+
+                            $subnet_address_1 = $sub_final + $subnet_address_1;
+                            //alert($subnet_address_1);
+                        }
+                    }
+                    $inverse_subnet = inverse_bin($subnet_address_1)[0]; // inverse subnet
+                    // check if come -1 no of hosts
+                    $d_no_host=inverse_bin($subnet_address_1)[1];
+                    $no_hosts = (Math.pow(2, inverse_bin($subnet_address_1)[1]) - 2) == -1 ? 0 : (Math.pow(2, inverse_bin($subnet_address_1)[1]) - 2);
+
+                    // check if come -1 no of subnets
+                    $no_subnets = (Math.pow(2, (8 - (inverse_bin($subnet_address_1)[1]))) - 2) == -1 ? 0 : (Math.pow(2, (8 - (inverse_bin($subnet_address_1)[1]))) - 2);
+
+$d_cidr=((8 * 3) + (8 - (inverse_bin($subnet_address_1)[1])));
+                    $cidr = ($("#ip_1").val()) + "." + ($("#ip_2").val()) + "." + ($("#ip_3").val()) + "." + ($("#ip_4")
+                        .val()) + " / " + ((8 * 3) + (8 - (inverse_bin($subnet_address_1)[1])));
+
+                    /* find broad cast address */
+                    //    ip_4 or decimal
+   $subnet_brodaddr=(parseInt($("#ip_4").val()) | parseInt($inverse_subnet, 2));
+
+                    $broadcast_addr = ($("#ip_1").val()) + "." + ($("#ip_2").val()) + "." + ($("#ip_3").val()) + "." + ($subnet_brodaddr);
+                    //alert($inverse_subnet);
+
+   $host_range=($("#ip_1").val()) + "." + ($("#ip_2").val()) + "." + ($("#ip_3").val()) + "." + ($subnet_netaddr+1)+ " - " +($("#ip_1").val()) + "." + ($("#ip_2").val()) + "." + ($("#ip_3").val()) + "." +($subnet_brodaddr-1);
+
+$valid_subnets="";
+for($i=($no_hosts+2);$i<$("#sub_4").val();$i+=($no_hosts+2))
+{
+    $valid_subnets+=($i+",");
+//alert($valid_subnets);
+
+}
+
+if($valid_subnets.length!="")
+    $valid_subnets=($valid_subnets.slice(0,($valid_subnets.lastIndexOf(","))))+".";
+    else
+        $valid_subnets=0 +"<span style='color:red;'> (Please check ip and Subnet Mask) </span>";
+
+
+
+
+
+                    $("#broadcast_address").html($broadcast_addr);
+                    Animresults(".result");
+                    $("#no_hosts").html($no_hosts);
+                    $("#no_subnets").html($no_subnets);
+                    $("#cidr").html($cidr);
+                    $("#host_res").html($host_range);
+                    $("#valid_sub").html($valid_subnets);
+//alert(parseInt($("#ip_4").val()).toString(2));
+                }
+
+                if (ipclass[0] == "B") {
+                    $("#net_label_holder_b").show();
+                    net_b.reset().play();
+
+      // $subnet_netaddr=
+                    // find Nework address
+                    $net_address = ($("#ip_1").val()) + "." + ($("#ip_2").val()) + "." + ($("#ip_3").val() & $("#sub_3").val()) + "." + ($("#ip_4").val() & $("#sub_4").val()); //ip  part4 & sub part 4
+                    $("#net_address").html($net_address);
+
+
+                    $subnet_address_1 = parseInt($("#sub_4").val()).toString(2); //convert to binary
+                    $subnet_address_2 = parseInt($("#sub_3").val()).toString(2); //convert to binary
+                    // for Broadcast address
+                    /*    if(parseInt($("#sub_4").val())==0)
+                            {
+                            $subnet_address_1="00000000"; // if zero last subnet
+                            //alert($subnet_address_1);
+                            }
+                            if(parseInt($("#sub_3").val())==0)
+                            {
+                            $subnet_address_2="00000000"; // if zero before last
+                            //alert($subnet_address_2);
+                            }
+
+                            */
+                    /*if subnet address length <=8 */
+                    // for last sub net
+                    if ($subnet_address_1.length != 8) {
+
+                        $curr_length = $subnet_address_1.length;
+                        $needed = 8 - $curr_length;
+                        $sub_final_1 = "";
+                        for ($x = 0; $x < $needed; $x++)
+                            $sub_final_1 += 0;
+
+                        $subnet_address_1 = $sub_final_1 + $subnet_address_1;
+
+                    }
+                    // for before last
+                    if ($subnet_address_2.length != 8) {
+                        $curr_length = $subnet_address_2.length;
+                        $needed = 8 - $curr_length;
+                        $sub_final_2 = "";
+                        for ($x = 0; $x < $needed; $x++)
+                            $sub_final_2 += 0;
+
+                        $subnet_address_2 = $sub_final_2 + $subnet_address_2;
+                    }
+                    //alert($subnet_address_1);
+                    //alert($subnet_address_2);
+                    //<----2---1
+                    $inverse_subnet_1 = inverse_bin($subnet_address_1)[0]; // inverse subnet 1
+                    $inverse_subnet_2 = inverse_bin($subnet_address_2)[0]; // inverse subnet 2
+
+                    $num_totalhost = inverse_bin($subnet_address_1)[1] + inverse_bin($subnet_address_2)[1];
+                    //alert($num_totalhost);
+                    $no_hosts = (Math.pow(2, $num_totalhost) - 2) == -1 ? 0 : (Math.pow(2, $num_totalhost) - 2);
+
+                    $no_subnets = (Math.pow(2, 16 - $num_totalhost) - 2) == -1 ? 0 : (Math.pow(2, 16 - $num_totalhost) - 2);
+                    //alert(inverse_bin($subnet_address_1)[1]);
+                    //    alert(inverse_bin($subnet_address_2)[1]);
+                    $cidr = ($("#ip_1").val()) + "." + ($("#ip_2").val()) + "." + ($("#ip_3").val()) + "." + ($("#ip_4").val()) + " / " + ((8 * 2) + ((8 - (inverse_bin($subnet_address_1)[1]))) + (8 - (inverse_bin($subnet_address_2)[1])));
+
+                    $broadcast_addr = ($("#ip_1").val()) + "." + ($("#ip_2").val()) + "." + (parseInt($("#ip_3").val()) | parseInt($inverse_subnet_2, 2)) + "." + (parseInt($("#ip_4").val()) | parseInt($inverse_subnet_1, 2));
+
+
+                    $("#no_subnets").html($no_subnets);
+                    $("#no_hosts").html($no_hosts);
+                    $("#cidr").html($cidr);
+                    $("#broadcast_address").html($broadcast_addr);
+                    Animresults(".result");
+
+                    $host_addrsplit=$net_address.split(".");
+                    $broad_addrsplit=$broadcast_addr.split(".");
+                    $host_range=($host_addrsplit[0]+"."+$host_addrsplit[1]+"."+$host_addrsplit[2]+"."+(parseInt($host_addrsplit[3])+1))+" - "+($broad_addrsplit[0]+"."+$broad_addrsplit[1]+"."+$broad_addrsplit[2]+"."+(parseInt($broad_addrsplit[3])-1));
+                      $("#host_res").html($host_range);
+
+                    $valid_subnets_b="There are <b style='color:#03C;'>"+$no_hosts+"</b> valid subnet address in above host range";
+
+  $("#valid_sub").html($valid_subnets_b);
+
+                         //$host_range
+                    //alert($subnet_address_1);
+                    //alert($subnet_address_2);
+                    //alert($inverse_subnet_1);
+                    //alert($inverse_subnet_2);
+                }
+
+            if (ipclass[0] == "A") {
+ $("#net_label_holder_a").show();
+                    net_a.reset().play();
+
+                $net_address = ($("#ip_1").val()) + "." + ($("#ip_2").val() & $("#sub_2").val()) + "." + ($("#ip_3").val() & $("#sub_3").val()) + "." + ($("#ip_4").val() & $("#sub_4").val()); //ip  part4 & sub part 3 & subnet 2
+                $("#net_address").html($net_address);
+                $subnet_address_1 = parseInt($("#sub_4").val()).toString(2); //convert to binary
+                $subnet_address_2 = parseInt($("#sub_3").val()).toString(2); //convert to binary
+                $subnet_address_3 = parseInt($("#sub_2").val()).toString(2); //convert to binary
+
+                if ($subnet_address_1.length != 8) {
+
+                    $curr_length = $subnet_address_1.length;
+                    $needed = 8 - $curr_length;
+                    $sub_final_1 = "";
+                    for ($x = 0; $x < $needed; $x++)
+                        $sub_final_1 += 0;
+
+                    $subnet_address_1 = $sub_final_1 + $subnet_address_1;
+
+                }
+                // for before last
+                if ($subnet_address_2.length != 8) {
+                    $curr_length = $subnet_address_2.length;
+                    $needed = 8 - $curr_length;
+                    $sub_final_2 = "";
+                    for ($x = 0; $x < $needed; $x++)
+                        $sub_final_2 += 0;
+
+                    $subnet_address_2 = $sub_final_2 + $subnet_address_2;
+                }
+
+                if ($subnet_address_3.length != 8) {
+                    $curr_length = $subnet_address_3.length;
+                    $needed = 8 - $curr_length;
+                    $sub_final_3 = "";
+                    for ($x = 0; $x < $needed; $x++)
+                        $sub_final_3 += 0;
+
+                    $subnet_address_3 = $sub_final_3 + $subnet_address_3;
+                }
+                //<--3--2---1
+                $inverse_subnet_1 = inverse_bin($subnet_address_1)[0]; // inverse subnet 1
+                $inverse_subnet_2 = inverse_bin($subnet_address_2)[0]; // inverse subnet 2
+                $inverse_subnet_3 = inverse_bin($subnet_address_3)[0]; // inverse subnet 3
+
+$num_totalhost = inverse_bin($subnet_address_1)[1] + inverse_bin($subnet_address_2)[1] + inverse_bin($subnet_address_3)[1];
+
+$no_hosts = (Math.pow(2, $num_totalhost) - 2) == -1 ? 0 : (Math.pow(2, $num_totalhost) - 2);
+$no_subnets = (Math.pow(2, 24 - $num_totalhost) - 2) == -1 ? 0 : (Math.pow(2, 24 - $num_totalhost) - 2);
+
+  $cidr=($("#ip_1").val())+"."+($("#ip_2").val())+"."+($("#ip_3").val())+"."+($("#ip_4").val())+" / "+((8*1)+((8-(inverse_bin($subnet_address_1)[1])))+(8-(inverse_bin($subnet_address_2)[1]))+(8-(inverse_bin($subnet_address_3)[1])));
+
+      $broadcast_addr = ($("#ip_1").val()) + "." + ($("#ip_2").val() | parseInt($inverse_subnet_3, 2)) + "." + (parseInt($("#ip_3").val()) | parseInt($inverse_subnet_2, 2)) + "." + (parseInt($("#ip_4").val()) | parseInt($inverse_subnet_1, 2));
+
+    $valid_subnets_a="";
+for($i=($no_hosts+2);$i<$("#sub_4").val();$i+=($no_hosts+2))
+{
+    $valid_subnets_a+=($i+",");
+//alert($valid_subnets);
+
+}
+  $("#valid_sub").html($valid_subnets_a);
+
+                $("#no_subnets").html($no_subnets);
+                    $("#no_hosts").html($no_hosts);
+                    $("#cidr").html($cidr);
+                    $("#broadcast_address").html($broadcast_addr);
+                    Animresults(".result");
+
+                $host_addrsplit=$net_address.split(".");
+                    $broad_addrsplit=$broadcast_addr.split(".");
+
+                    $host_range=($host_addrsplit[0]+"."+$host_addrsplit[1]+"."+$host_addrsplit[2]+"."+(parseInt($host_addrsplit[3])+1))+" - "+($broad_addrsplit[0]+"."+$broad_addrsplit[1]+"."+$broad_addrsplit[2]+"."+(parseInt($broad_addrsplit[3])-1));
+
+                      $("#host_res").html($host_range);
+                                    $valid_subnets_c="There are <b style='color:#03C;'>"+$no_hosts+"</b> valid subnet address in above host range";
+
+  $("#valid_sub").html($valid_subnets_c);
+            }
+            //alert($ip_fiedls);
+
+            //alert($ip_data);
+
+                else if (ipclass[0] == "D" || ipclass[0] == "E") {
+                    //alert("It has no subnetting. If you have any suggestion please mail me biratheeban@live.com");
+$("#demonstrate_popup").html(" <div id='exit' onclick='exit()'>X</div> It has no subnetting.<br> If you have any suggestion please mail me <a href='mailto:biratheeban@live.com'>biratheeban@live.com</a>");
+                     $("#demonstrate_popup").show();
+                Anim_info("#demonstrate_popup");
+
+
+                }
+        }
+        }
+    </script>
+
+    <script>
+
+        //exit
+function exit(){
+ $("#demonstrate_popup").fadeOut(250);
+}
+      /*  $("#exit").click(function(){
+
+ $("#demonstrate_popup").fadeOut(250);
+        })*/
+        function Anim(x) {
+            $("#" + x).removeClass("animated bounceIn").addClass('animated bounceIn form-control ip_sub sub').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass("animated bounceIn");
+            });
+        };
+
+        function Animsub(x) {
+            $(x).removeClass("animated bounceIn").addClass('animated bounceIn form-control ip_sub sub').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass("animated bounceIn");
+            });
+        };
+
+        function Animresults(x) {
+            $(x).removeClass("animated fadeIn").addClass('animated fadeIn result').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass("animated fadeIn");
+            });
+        };
+         function Anim_my(x) {
+            $(x).removeClass("animated pulse").addClass('animated pulse ').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass("animated pulse");
+            });
+        };
+        function Anim_how(x) {
+            $(x).removeClass("animated fadeInDown").addClass('animated fadeInDown ').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass("animated fadeInDown");
+            });
+        }; function Anim_how_hilight(x) {
+            $(x).removeClass("animated flash").addClass('animated flash ').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass("animated flash");
+            });
+        };
+     function Anim_how_note(x) {
+            $(x).removeClass("animated fadeInUp").addClass('animated fadeInUp ').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass("animated fadeInUp");
+            });
+        };
+    function demonstrate_entry(x) {
+            $(x).removeClass("animated flipInY").addClass('animated flipInY ').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass("animated flipInY");
+            });
+        }; function error_alert(x) {
+            $(x).removeClass("animated shake").addClass('animated shake ').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass("animated shake");
+            });
+        };function Anim_info(x) {
+            $(x).removeClass("animated zoomIn").addClass('animated zoomIn ').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                $(this).removeClass("animated zoomIn");
+            });
+        };
+
+
+    </script>
+
+
+    <script>
+        var net_c = new Vivus('net_c', {
+            type: 'scenario-sync',
+            duration: 20,
+            start: 'autostart',
+            dashGap: 20,
+            forceRender: false
+        });
+        var net_b = new Vivus('net_b', {
+            type: 'scenario-sync',
+            duration: 20,
+            start: 'autostart',
+            dashGap: 20,
+            forceRender: false
+        });
+           var net_a = new Vivus('net_a', {
+            type: 'scenario-sync',
+            duration: 20,
+            start: 'autostart',
+            dashGap: 20,
+            forceRender: false
+        });
+        var demo_net_c = new Vivus('demo_net_c', {
+            type: 'scenario-sync',
+            duration: 20,
+            start: 'autostart',
+            dashGap: 20,
+            forceRender: false
+        }); var demo_indicate_c = new Vivus('demo_indicate_c', {
+            type: 'scenario-sync',
+            duration: 20,
+            start: 'autostart',
+            dashGap: 20,
+            forceRender: false
+        });
+    </script>
+
+</body>
+
+</html>
