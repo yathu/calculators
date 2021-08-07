@@ -5,6 +5,10 @@
     <title>Matrix</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta title="Matrix Multiplication Calculator">
+    <meta name="keywords" content="matrix, multiplication, calculator, online, free">
+    <meta name="description" content="Here you can perform matrix multiplication with complex numbers online for free. After calculation you can multiply the result by another matrix right there!">
+
     <link rel="stylesheet" href="res/bootstrap-3.3.5-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="res/css/style.css">
     <link rel="stylesheet" href="res/css/animate.css">
@@ -17,12 +21,12 @@
 <body>
 
     <div class="container-fulid">
-        <h2 style="text-align:center;">Matrix Mutipication Calculator</h2>
+        <h1 style="text-align:center;">Matrix Multiplication Calculator</h1>
         <br>
         <br>
         <br>
         <br>
-        <a href="http://piratheepan.co.nr/Matrix_det">
+        <a href="Matrix_det/index.html">
             <div id="Matrix_multiply" data-toggle="popover" data-trigger="hover" data-content="Click to Visit Matrix Determinant Calculator"><span class="
 glyphicon glyphicon-globe"></span>
             </div>
@@ -177,7 +181,7 @@ glyphicon glyphicon-globe"></span>
         }
 
 
-        // to array 
+        // to array
         function toArray(tableName, arrayName) {
             $x = 0;
             $("." + tableName + "tr").each(function () {
@@ -222,7 +226,7 @@ glyphicon glyphicon-globe"></span>
         }
 
 
-        // craeate dyn matrix 
+        // craeate dyn matrix
         function createTable($norow, $nocolums, $tbl_id) {
                 $table = '<table id=' + $tbl_id + ' class="table_custom">';
                 for ($rows = 0; $rows < $norow; $rows++) {
@@ -243,7 +247,7 @@ glyphicon glyphicon-globe"></span>
             hidehow(); // hide how
             checkmuti = true;
             if(noOfRows===3){
-            
+
              $("#how").removeProp("disabled");
             }
 
@@ -397,7 +401,7 @@ glyphicon glyphicon-globe"></span>
 
                     $(".tbl_A tr:eq(" + $t + ")").find("td:eq(" + $tc + ")").css("background-color", "red").hide().fadeIn(500);
                     $(".tbl_B tr:eq(" + $tc + ")").find("td:eq(" + $t + ")").css("background-color", "red").hide().fadeIn(500);
- 
+
                 }
 
             }*/
@@ -450,7 +454,7 @@ glyphicon glyphicon-globe"></span>
                 return false;
             }
              $("#how").prop("disabled", "true");// hide how button
-            
+
             var lasttd = $("." + $table + " tr:eq(0)").find("td").length;
 
             // alert($currentrow);
